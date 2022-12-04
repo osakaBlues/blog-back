@@ -2,12 +2,9 @@ import { VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { PostModule } from './post/post.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(
-      AppModule,
-    );
+  const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
     .setTitle('Osaka Blues Blog')
     .setDescription('간단한 블로그를 만들어보자')
@@ -17,8 +14,9 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
-  app.setGlobalPrefix('api')
+  app.setGlobalPrefix('api');
   SwaggerModule.setup('docs', app, documet);
-  await app.listen(3000);``
+  await app.listen(3000);
+  ``;
 }
 bootstrap();
