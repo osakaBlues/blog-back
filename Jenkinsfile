@@ -54,7 +54,7 @@ pipeline {
             withAWS(region:'ap-northeast-1') {
               createDeployment(
                 applicationName: 'OsakaBluesblog',
-                deploymentGroupName: 'blog-group',
+                deploymentGroupName: 'blog-group-backend',
                 deploymentConfigName: 'CodeDeployDefault.OneAtATime',
                 description: 'test deploy to back',
                 waitForCompletion: true,
