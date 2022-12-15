@@ -1,0 +1,31 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/deploy/blog-back
+    overwirte: yes
+permissions:
+  - object: /
+    owner: ubuntu
+    group: ubuntu
+hooks:
+  ApplicationStop:
+    - location: script/ApplicationStop.sh
+      timeout: 60
+      runas: root
+  BeforeInstall:
+    - location: script/BeforeInstall.sh
+      timeout: 60
+      runas: root
+  AfterInstall:
+    - location: script/AfterInstall.sh
+      timeout: 60
+      runas: root
+  ApplicationStart:
+    - location: script/ApplicationStart.sh
+      timeout: 180
+      runas: root
+  ValidateSercive:
+    - location: script/ValidateService.sh
+      timeout: 60
+      runas: root
