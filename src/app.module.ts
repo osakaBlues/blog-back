@@ -1,14 +1,26 @@
 import { Module } from '@nestjs/common';
-import { PostModule } from './post/post.module';
-import { MemoController } from './memo/memo.controller';
-import { MemoService } from './memo/memo.service';
 import { MemoModule } from './memo/memo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeORMConfig } from './config/typeorm.config';
+import { Memo } from './memo/memo.entity';
+import { ConfigurationModule } from './config.module';
+import config from './config';
 
 @Module({
-  imports: [PostModule, MemoModule, TypeOrmModule.forRoot(typeORMConfig)],
-  controllers: [MemoController],
-  providers: [MemoService],
+  imports: [
+    MemoModule,
+    TypeOrmModule.forRoot({
+      type: config.DATABASE.TYPE,
+      host: config.DATABASE.HOST,
+      port: config.DATABASE.PORT,
+      username: config.DATABASE.USER_NAME,
+      password: config.DATABASE.PASSWORD,
+      database: config.DATABASE.DATABASE_NAME,
+      entities: [Memo],
+      synchronize: true,
+    }),
+    ConfigurationModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

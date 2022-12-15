@@ -1,12 +1,17 @@
+version: '3'
 services:
-  mariadb:
-    image: mariadb:10
-    container_name: blog-db
-    env_file:
-      - ./db/.env
+  db:
+    image: mysql
+    container_name: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=test
+      - MYSQL_DATABASE=testing
+      - MYSQL_ROOT_PASSWORD=tst
     volumes:
       - ./db/conf.d:/etc/mysql/conf.d
       - ./db/data:/var/lib/mysql
-    restart: always
-    ports:
-      - '13306:3306'
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
