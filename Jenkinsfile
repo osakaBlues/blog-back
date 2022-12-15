@@ -15,6 +15,7 @@ pipeline {
       steps{
         script{
           try{
+            echo "${params.env}" > .env
             sh 'yarn install'
             sh 'yarn build'
            } catch(error){
@@ -27,7 +28,7 @@ pipeline {
       steps{
         script{
           try {
-            sh 'tar  -cvf  back.tar . > /dev/null'
+            sh 'tar  -cf  back.tar .'
           } catch (error) {
             errorHendler(error)
           }
