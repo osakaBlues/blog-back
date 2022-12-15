@@ -15,7 +15,7 @@ pipeline {
       steps{
         script{
           try{
-            echo "${params.env}" > .env
+            sh "echo ${params.env} > .env"
             sh 'yarn install'
             sh 'yarn build'
            } catch(error){
