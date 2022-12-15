@@ -1,14 +1,23 @@
 import { Module } from '@nestjs/common';
-import { PostModule } from './post/post.module';
-import { MemoController } from './memo/memo.controller';
-import { MemoService } from './memo/memo.service';
 import { MemoModule } from './memo/memo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeORMConfig } from './config/typeorm.config';
+import { Memo } from './memo/memo.entity';
 
 @Module({
-  imports: [PostModule, MemoModule, TypeOrmModule.forRoot(typeORMConfig)],
-  controllers: [MemoController],
-  providers: [MemoService],
+  imports: [
+    MemoModule,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'user',
+      password: 'test',
+      database: 'testing',
+      entities: [Memo],
+      synchronize: true,
+    }),
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
