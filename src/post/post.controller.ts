@@ -15,7 +15,7 @@ import { PostDto } from 'src/dto/post.dto';
 import { PostService } from './post.service';
 import { Response } from 'express';
 import { Body } from '@nestjs/common/decorators';
-import { BLOG_VERSION } from 'src/config';
+import config from 'src/config';
 
 /**
  * 블로그 글과 관련된 요청들을 받는 Controller
@@ -23,7 +23,7 @@ import { BLOG_VERSION } from 'src/config';
  */
 @ApiTags('post와 관련된 request를 처리한다.')
 @Controller({
-  version: BLOG_VERSION,
+  version: config.BLOG.VERSION,
   path: 'posts',
 })
 export class PostController {
