@@ -8,6 +8,7 @@ async function bootstrap() {
   const logger = new Logger('Main');
   logger.log(`${config.DATABASE.TYPE}`);
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.enableVersioning({
     type: VersioningType.URI,
   });
