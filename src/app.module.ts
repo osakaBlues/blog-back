@@ -3,7 +3,9 @@ import { MemoModule } from './memo/memo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Memo } from './memo/memo.entity';
 import { ConfigurationModule } from './config.module';
+import { AuthModule } from './auth/auth.module';
 import config from './config';
+import { User } from './auth/user.entity';
 
 @Module({
   imports: [
@@ -15,10 +17,11 @@ import config from './config';
       username: config.DATABASE.USER_NAME,
       password: config.DATABASE.PASSWORD,
       database: config.DATABASE.DATABASE_NAME,
-      entities: [Memo],
+      entities: [Memo, User],
       synchronize: true,
     }),
     ConfigurationModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
