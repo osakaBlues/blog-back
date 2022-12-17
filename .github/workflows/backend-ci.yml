@@ -26,6 +26,20 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-    - run: yarn install
-    - run: yarn build
-    - run: yarn test
+    - name: install dependency
+      run: yarn install
+    - name: check build
+      run: yarn build
+    - name: build docker compose
+      run: docker-compose build
+    - name: up mysql
+      run: docker-compose up -d
+    - name: test
+      env: 
+        DATABASE_TYPE: mysql
+        DATABASE_HOST: localhost
+        DATABASE_PORT: 3306
+        DATABASE_USER_NAME: user
+        DATABASE_PASSWORD: test
+        DATABASE_DATABASE_NAME: testing
+      run: yarn test
