@@ -20,6 +20,7 @@ pipeline {
             sh 'yarn build'
            } catch(error){
             errorHendler(error)
+            return;
           }
         }
       }
@@ -31,6 +32,7 @@ pipeline {
             sh 'tar  -cf  back.tar .'
           } catch (error) {
             errorHendler(error)
+            return;
           }
         }
       }
@@ -44,6 +46,7 @@ pipeline {
             }
           } catch(error){
             errorHendler(error)
+            return;
           }
         }
       }
@@ -67,6 +70,7 @@ pipeline {
             }
           } catch(error){
             errorHendler(error)
+            return;
           }
         }
       }
