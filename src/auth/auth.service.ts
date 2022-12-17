@@ -29,13 +29,16 @@ export class AuthService {
       password: hashedPassword,
     });
 
+    const dup = await this.userRepository.findOneBy({ name });
+    if (dup) throw new ConflictException('Username already exists');
+
     try {
       await this.userRepository.save(user);
     } catch (error) {
       if (error.code === '23505') {
         throw new ConflictException('Username already exists');
       } else {
-        throw new InternalServerErrorException();
+        throw new InternalServerErrorException(error.code);
       }
     }
   }
