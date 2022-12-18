@@ -8,7 +8,13 @@ on:
     branches: [ "main", "release/main" ]
   pull_request:
     branches: [ "main", "release/main" ]
-
+env:
+  DATABASE_TYPE: mysql
+  DATABASE_HOST: localhost
+  DATABASE_PORT: 3306
+  DATABASE_USER_NAME: user
+  DATABASE_PASSWORD: test
+  DATABASE_DATABASE_NAME: testing
 jobs:
   build:
 
@@ -30,16 +36,18 @@ jobs:
       run: docker-compose build
     - name: up mysql
       run: docker-compose up -d
+
     - name: install dependency
       run: yarn install
     - name: check build
       run: yarn build
+
+    - name: check docker container healthy
+      run: |
+        docker_flag=`docker ps -f "health=healthy" -f "name=test_mysql" -q`; \
+        while [ -z $docker_flag ]; \
+        do sleep 1; \
+        docker_flag=`docker ps -f "health=healthy" -f "name=test_mysql" -q`; \
+        done;
     - name: test
-      env: 
-        DATABASE_TYPE: mysql
-        DATABASE_HOST: localhost
-        DATABASE_PORT: 3306
-        DATABASE_USER_NAME: user
-        DATABASE_PASSWORD: test
-        DATABASE_DATABASE_NAME: testing
-      run: yarn test
+            run: yarn test
