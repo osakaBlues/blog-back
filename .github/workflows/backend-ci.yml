@@ -50,4 +50,4 @@ jobs:
         docker_flag=`docker ps -f "health=healthy" -f "name=test_mysql" -q`; \
         done;
     - name: test
-            run: yarn test
+      run: yarn test
