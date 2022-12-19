@@ -11,17 +11,13 @@ import {
 import { Memo } from './memo.entity';
 import MemoDto from './memo.dto';
 import { MemoService } from './memo.service';
-import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 
 @Controller('memo')
 export class MemoController {
-  constructor(
-    private readonly memoService: MemoService,
-    private readonly configService: ConfigService,
-  ) {}
+  constructor(private readonly memoService: MemoService) {}
 
   @Get()
   getAll(): Promise<Memo[]> {
