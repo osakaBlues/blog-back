@@ -2,13 +2,18 @@ import { Logger, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import config from './config';
+import config from './config/config';
 
 async function bootstrap() {
   const logger = new Logger('Main');
   logger.log(`${config.DATABASE.TYPE}`);
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  const corsOptions = {
+    origin: /\.osakablues\.site$/,
+    methods: 'GET, PUT, POST, DELETE',
+    optionSuccessStatus: 204,
+  };
+  app.enableCors(corsOptions);
   app.enableVersioning({
     type: VersioningType.URI,
   });

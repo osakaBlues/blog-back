@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
-import { MemoModule } from './memo/memo.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Memo } from './memo/memo.entity';
-import { ConfigurationModule } from './config.module';
+import { ConfigurationModule } from './config/config.module';
 import { AuthModule } from './auth/auth.module';
-import config from './config';
+import config from './config/config';
 import { User } from './auth/user.entity';
+import { CategoryModule } from './category/category.module';
+import { Category } from './category/category.entity';
+import { Board } from './board/board.entity';
+import { BoardModule } from './board/board.module';
 
 @Module({
   imports: [
-    MemoModule,
     TypeOrmModule.forRoot({
       type: config.DATABASE.TYPE,
       host: config.DATABASE.HOST,
@@ -17,11 +18,13 @@ import { User } from './auth/user.entity';
       username: config.DATABASE.USER_NAME,
       password: config.DATABASE.PASSWORD,
       database: config.DATABASE.DATABASE_NAME,
-      entities: [Memo, User],
+      entities: [User, Category, Board],
       synchronize: true,
     }),
     ConfigurationModule,
     AuthModule,
+    CategoryModule,
+    BoardModule,
   ],
   controllers: [],
   providers: [],

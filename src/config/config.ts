@@ -1,21 +1,11 @@
 import * as dotenv from 'dotenv';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 
 dotenv.config();
 
-interface databaseNames {
-  TYPE:
-    | 'mysql'
-    | 'postgres'
-    | 'mariadb'
-    | 'sqlite'
-    | 'mssql'
-    | 'oracle'
-    | 'mongodb';
-}
-
 const config = {
   DATABASE: {
-    TYPE: process.env.DATABASE_TYPE as databaseNames['TYPE'],
+    TYPE: process.env.DATABASE_TYPE as MysqlConnectionOptions['type'],
     HOST: process.env.DATABASE_HOST,
     PORT: parseInt(process.env.DATABASE_PORT) || 3306,
     USER_NAME: process.env.DATABASE_USER_NAME,

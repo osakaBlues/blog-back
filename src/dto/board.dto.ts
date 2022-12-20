@@ -1,17 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class PostDto {
-  constructor({ author, title, content, date }) {
-    this.author = author;
-    this.title = title;
-    this.content = content;
-    this.date = date;
+export interface BoardDtoOptions {
+  title?: string;
+  content?: string;
+  category?: string;
+}
+
+/**
+ * BoardDto
+ * @param title 글 제목
+ * @param content 글 본문
+ * @param category 카테고리
+ */
+export class BoardDto {
+  constructor(options?: BoardDtoOptions) {
+    this.title = options.title;
+    this.content = options.content;
+    this.category = options.category;
   }
-  @ApiProperty({
-    description: '작성자',
-    example: 'test_author',
-  })
-  author: string;
   @ApiProperty({
     description: '글 카테고리',
     example: '기본',
@@ -28,9 +34,4 @@ export class PostDto {
       '적당히 테스트 하기 좋은 글의 내용들이 적혀있어요\n대충 두줄 이상입니다.',
   })
   content: string;
-  @ApiProperty({
-    description: '글이 최종적으로 수정된 날짜',
-    example: '2022-12-03T15:13:10.890Z',
-  })
-  date: Date;
 }

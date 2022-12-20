@@ -1,4 +1,3 @@
-import { Memo } from 'src/memo/memo.entity';
 import {
   Column,
   Entity,
@@ -6,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { Board } from 'src/board/board.entity';
 
 @Entity()
 @Unique(['name'])
@@ -19,6 +19,6 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Memo, (memo) => memo.user, { eager: false })
-  memo: Memo[];
+  @OneToMany(() => Board, (board) => board, { eager: false })
+  board: Board[];
 }
