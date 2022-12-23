@@ -31,6 +31,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "mysql": "^2.18.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
@@ -68,7 +69,9 @@
       "json",
       "ts"
     ],
-    "roots": ["<rootDir>"],
+    "roots": [
+      "<rootDir>"
+    ],
     "modulePaths": [
       "<rootDir>"
     ],

@@ -22,6 +22,8 @@ export class Board {
   content: string;
   @Column()
   date: Date;
+  @Column()
+  updated_date: Date;
   @ManyToOne(() => User, (user) => user.board, { eager: true })
   user: User;
   @ManyToOne(() => Category, (category) => category.board, { eager: true })

@@ -30,8 +30,7 @@ export class BoardService {
    */
   async create(boardDto: BoardDto, user: User): Promise<Board> {
     this.logger.log(`create ${boardDto.title}`);
-    const date = Date.now();
-    const { title, content } = boardDto;
+    const { title, content, date } = boardDto;
     let category: Category;
     try {
       category = await this.categoryRepository.findOneByOrFail({
@@ -64,7 +63,7 @@ export class BoardService {
     let board: Board;
     try {
       board = await this.boardRepository.findOneByOrFail({ id });
-    } catch (e) {
+    } catch {
       this.logger.log('board not found');
       throw new NotFoundException();
     }
@@ -76,32 +75,59 @@ export class BoardService {
   }
 
   /**
-   * update
-   * @param id
-   * @param BoardDto
-   * @returns Promise<Board>
-   */
-  update(id: number, BoardDto: BoardDto): Promise<Board> {
-    this.logger.log(`update ${id}`);
-    return null;
-  }
-
-  /**
    * getOne
    * @param id
    * @returns Promise<Board>
    */
-  getOne(id: number): Promise<Board> {
+  async getOne(id: number): Promise<Board> {
     this.logger.log(`getOne ${id}`);
-    return null;
+    let board: Board;
+    try {
+      board = await this.boardRepository.findOneByOrFail({ id });
+    } catch {
+      this.logger.log(`id ${id} board not found`);
+      throw new NotFoundException();
+    }
+    return board;
   }
 
   /**
    * getAll
    * @returns Promise<Board[]>
    */
-  getAll(): Promise<Board[]> {
+  async getAll(): Promise<Board[]> {
     this.logger.log(`getAll`);
-    return null;
+    return await this.boardRepository.find();
+  }
+
+  /**
+   * update
+   * @param id board id
+   * @param BoardDto 바꾸고 싶은 board정보
+   * @returns Promise<Board>
+   */
+  async update(id: number, boardDto: BoardDto, user: User): Promise<Board> {
+    this.logger.log(`update ${id}`);
+    let board: Board;
+    try {
+      board = await this.boardRepository.findOneByOrFail({ id });
+    } catch {
+      this.logger.log(`id ${id} board not found`);
+      throw new NotFoundException();
+    }
+    if (board.user.id !== user.id) throw new UnauthorizedException();
+    try {
+      const category = await this.categoryRepository.findOneByOrFail({
+        name: boardDto.category,
+      });
+      board.category = category;
+      board.title = boardDto.title;
+      board.content = boardDto.content;
+    } catch {
+      this.logger.log(`category not found`);
+      throw new BadRequestException();
+    }
+    this.boardRepository.update(id, board);
+    return board;
   }
 }

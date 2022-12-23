@@ -1,4 +1,4 @@
-import { Logger, VersioningType } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -18,6 +18,7 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
   app.setGlobalPrefix('api');
+  // app.useGlobalPipes(new ValidationPipe({ transform: true }));
   const configApp = new DocumentBuilder()
     .setTitle(config.BLOG.TITLE)
     .setDescription('간단한 블로그를 만들어보자')

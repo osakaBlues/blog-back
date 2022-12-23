@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Logger,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CredentialDto } from './auth.credential.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -7,10 +14,12 @@ import { User } from './user.entity';
 
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger(AuthController.name);
   constructor(private readonly authService: AuthService) {}
 
   @Post('/signup')
   signup(@Body() dto: CredentialDto): Promise<void> {
+    this.logger.log('POST: signup');
     return this.authService.signUp(dto);
   }
 

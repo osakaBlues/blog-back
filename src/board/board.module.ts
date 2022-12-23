@@ -5,7 +5,6 @@ import { BoardRepository } from './board.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Board } from './board.entity';
 import { AuthModule } from 'src/auth/auth.module';
-import { CategoryRepository } from 'src/category/category.repository';
 import { CategoryModule } from 'src/category/category.module';
 
 @Module({

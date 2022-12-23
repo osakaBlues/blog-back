@@ -2,19 +2,15 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   Logger,
   Param,
   ParseIntPipe,
   Post,
   Put,
-  Query,
-  Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BoardDto } from 'src/dto/Board.dto';
 import { BoardService } from './board.service';
-import { Response } from 'express';
 import { Body, UseGuards } from '@nestjs/common/decorators';
 import config from '../config/config';
 import { GetUser } from 'src/auth/get-user.decorator';
@@ -46,13 +42,14 @@ export class BoardController {
     description: '해당 id의 포스트를 요청합니다.',
     type: String,
   })
-  @ApiResponse({ status: 400, description: 'id가 숫자가 아닙니다.' })
-  getBoardWithId(@Param('id', ParseIntPipe) id: number) {
-    return null;
+  @ApiResponse({ status: 404, description: 'id가 숫자가 아닙니다.' })
+  getBoardWithId(@Param('id', ParseIntPipe) id: number): Promise<Board> {
+    this.logger.log(`GET: ${id} get with id`);
+    return this.boardService.getOne(id);
   }
 
   /**
-   *
+   * @todo page와 size를 받아서 page에 맞는 size만큼의 Board를 리턴한다.
    * @param page
    * @returns
    */
@@ -77,12 +74,8 @@ export class BoardController {
     example: 10,
     description: '한 페이지 당 Board의 개수',
   })
-  getAllBoards(
-    @Query('page') page: number,
-    @Query('size') size: number,
-    @Res() res: Response,
-  ) {
-    return null;
+  getAllBoards(): Promise<Board[]> {
+    return this.boardService.getAll();
   }
 
   @Post()
@@ -93,14 +86,23 @@ export class BoardController {
     required: true,
     description: '생성할 Board의 정보',
   })
+  @ApiResponse({
+    status: 200,
+    type: BoardDto,
+    description: '생성한 Board를 리턴합니다.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'category name이 잘못되었습니다.',
+  })
   @UseGuards(AuthGuard())
-  createOne(@Body() BoardDto: BoardDto, @GetUser() user: User): Promise<Board> {
+  createOne(@Body() boardDto: BoardDto, @GetUser() user: User): Promise<Board> {
     this.logger.log(
-      'Post 생성' +
-        `title: ${BoardDto.title} ` +
-        `content: ${BoardDto.content}`,
+      'POST 생성' +
+        `title: ${boardDto.title} ` +
+        `content: ${boardDto.content}`,
     );
-    return this.boardService.create(BoardDto, user);
+    return this.boardService.create(boardDto, user);
   }
 
   @Put(':id')
@@ -112,8 +114,22 @@ export class BoardController {
     example: 1,
     description: '수정하고 싶은 Board의 id',
   })
-  updateOne(@Param('id') id: number): string {
-    return null;
+  @ApiResponse({
+    status: 200,
+    type: BoardDto,
+    description: '수정한 Board를 리턴합니다.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'category name이 잘못되었습니다.',
+  })
+  @UseGuards(AuthGuard())
+  updateOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() BoardDto: BoardDto,
+    @GetUser() user: User,
+  ): Promise<Board> {
+    return this.boardService.update(id, BoardDto, user);
   }
 
   @Delete(':id')
@@ -126,7 +142,10 @@ export class BoardController {
     description: '삭제하고 싶은 Board의 id',
   })
   @UseGuards(AuthGuard())
-  deleteOne(@Param('id') id: number, @GetUser() user: User): void {
+  deleteOne(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): void {
     this.logger.log(`Delete 삭제 id: ${id}`);
     this.boardService.delete(id, user);
   }
